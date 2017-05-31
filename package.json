@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "lib/index.js",
   "files": [
-    "**/*"
+    "lib"
   ],
   "scripts": {
     "benchmark": "cd benchmark && for /R %i in (*.benchmark.*) do echo. && echo %i && echo. && browserify -t babelify %i | browser-run",

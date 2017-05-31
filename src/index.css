@@ -1,0 +1,64 @@
+:root {
+	--react-ui-numeric-input-btn-bg-color: #333333;
+	--react-ui-numeric-input-btn-color: rgba(239, 176,  64, 1);
+	--react-ui-numeric-input-font-family: Courier;
+	--react-ui-numeric-input-font-size: 25px;
+	--react-ui-numeric-input-textfield-bg-color: white;
+	--react-ui-numeric-input-textfield-color: black;
+}
+
+.react-ui-numeric-input {
+	display: flex;
+	flex-direction: row;
+	flex: 1;
+
+	height: 40px;
+}
+
+.react-ui-numeric-input-btn {
+	font-family: var(--react-ui-numeric-input-textfield-font-family);
+	font-size: var(--react-ui-numeric-input-font-size);
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 40px;
+	padding: 0;
+
+	color: var(--react-ui-numeric-input-btn-color);
+	border: none;
+	background-color: var(--react-ui-numeric-input-btn-bg-color);
+}
+
+.react-ui-numeric-input-btn:focus {
+	outline: none;
+}
+
+.react-ui-numeric-input-btn:active,
+.react-ui-numeric-input-btn:hover {
+	cursor: pointer;
+
+	color: var(--react-ui-numeric-input-btn-bg-color);
+	background-color: var(--react-ui-numeric-input-btn-color);
+}
+
+.react-ui-numeric-input-textfield {
+	font-family: var(--react-ui-numeric-input-textfield-font-family);
+	font-size: var(--react-ui-numeric-input-font-size);
+
+	display: flex;
+	flex: 1;
+
+	width: 0;
+
+	text-align: center;
+
+	color: var(--react-ui-numeric-input-textfield-color);
+	border: none;
+	background-color: var(--react-ui-numeric-input-textfield-bg-color);
+}
+
+.react-ui-numeric-input-textfield:focus {
+	outline: none;
+}

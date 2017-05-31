@@ -4,7 +4,7 @@ import { storiesOf, action } from '@kadira/storybook';
 import NumericInput from '../src/index.jsx';
 
 const _handleChange = function (value) {
-  action('click')(value);
+  action('change')(value);
 };
 
 storiesOf('NumericInput', module)
@@ -17,10 +17,7 @@ storiesOf('NumericInput', module)
   })
   .add('default', () => {
     return (
-      <NumericInput
-        value="1"
-        onChange={_handleChange}
-      />
+      <NumericInput />
     );
   })
   .add('vertical: true', () => {
@@ -28,16 +25,22 @@ storiesOf('NumericInput', module)
       <NumericInput
         value="1"
         vertical
-        onChange={_handleChange}
       />
     );
   })
-  .add('disableKeyInput: true', () => {
+  .add('keyInputDisabled: true', () => {
     return (
       <NumericInput
         value="1"
-        disableKeyInput
-        onChange={_handleChange}
+        keyInputDisabled
+      />
+    );
+  })
+  .add('disabled: true', () => {
+    return (
+      <NumericInput
+        value="1"
+        disabled
       />
     );
   })
@@ -47,7 +50,6 @@ storiesOf('NumericInput', module)
         value="1"
         min={-1}
         max={1}
-        onChange={_handleChange}
       />
     );
   })
@@ -58,7 +60,6 @@ storiesOf('NumericInput', module)
         min={-1}
         max={1}
         loop
-        onChange={_handleChange}
       />
     );
   })
@@ -68,7 +69,6 @@ storiesOf('NumericInput', module)
         value="1"
         step={0.11}
         precision={2}
-        onChange={_handleChange}
       />
     );
   })
@@ -78,6 +78,13 @@ storiesOf('NumericInput', module)
         value="1"
         step={0.11}
         precision={1}
+      />
+    );
+  })
+  .add('onChange', () => {
+    return (
+      <NumericInput
+        value="1"
         onChange={_handleChange}
       />
     );

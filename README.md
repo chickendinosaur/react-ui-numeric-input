@@ -6,7 +6,7 @@ React numeric input textfield with no dependencies.
 
 ## Installation
 
-### npm
+#### npm
 
 npm install @chickendinosaur/react-ui-numeric-input
 
@@ -32,11 +32,33 @@ React.render(
 ```
 ---
 
-#### Styles
+#### Props
+Name                | Type                                | Default
+--------------------|-------------------------------------|:-------:
+**value**           |`number` or `string` or `null`       | `""` which converts to `null`
+**min**             |`number`                             | `Number.MIN_SAFE_INTEGER`
+**max**             |`number`                             | `Number.MAX_SAFE_INTEGER`
+**step**            |`number`                             | `1`
+**precision**       |`number`                             | `0`
+**loop**            |`boolean`                            | `false`
+**vertical**        |`boolean`                            | `false`
+**className**       |`string`                             | `null`
+**disabled**        |`boolean`                            | `false`
+**keyInputDisabled**|`boolean`                            | `false`
+**style**           |`object`                             | `null`
+**btnStyle**        |`object`                             | `null`
+**textfieldStyle**  |`object`                             | `null`
+**onChange**        |`function`                           | `null`
+
+#### Styling
 
 - Each internal component has a style prop that can be overridden via inline style objects.
-- CSS can be overridden by passing the component a new class to it's className prop and overwriting it's immediate
+- CSS can be overridden by passing the component a new class to mit's className prop and overwriting it's immediate
 children CSS selectors.
+
+#### Features
+
+- Hold button to auto increase or decrease value by step.
 
 # Development
 

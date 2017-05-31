@@ -5,13 +5,14 @@ export default class NumericInput extends React.PureComponent {
     style: null,
     className: null,
     value: null,
-    min: null,
-    max: null,
+    min: Number.MIN_SAFE_INTEGER,
+    max: Number.MAX_SAFE_INTEGER,
     step: 1,
     loop: false,
     precision: 0,
     vertical: false,
-    disableKeyInput: false,
+    disabled: false,
+    keyInputDisabled: false,
     btnStyle: null,
     textfieldStyle: null,
     onChange: null
@@ -20,26 +21,33 @@ export default class NumericInput extends React.PureComponent {
   constructor(props) {
     super(props);
 
+    this._timerRef = null;
+
     this.state = {
-      value: parseFloat(props.value)
+      value: (props.value === null || props.value === '') ? null : parseFloat(props.value)
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.value < this.props.min ||
-      this.state.value > this.props.max) {
-      this._setValue(nextProps.value);
+    if (this.state.value !== nextProps.value ||
+      nextProps.value < this.props.min ||
+      nextProps.value > this.props.max) {
+      this.setState(() => {
+        return {
+          value: this._assureValueBounds(nextProps.value)
+        };
+      });
     }
   }
 
-  assureValueBounds(value) {
+  _assureValueBounds(value) {
     let nextValue = value;
 
-    if (this.props.min !== null &&
-        nextValue < this.props.min) {
+    if (nextValue === null) {
+      nextValue = null;
+    } else if (nextValue < this.props.min) {
       nextValue = this.props.min;
-    } else if (this.props.max !== null &&
-        nextValue > this.props.max) {
+    } else if (nextValue > this.props.max) {
       nextValue = this.props.max;
     }
 
@@ -60,8 +68,15 @@ export default class NumericInput extends React.PureComponent {
     }
   }
 
-  _handleAddSubtractBtnClick = (e) => {
-    const step = e.target.dataset.id === '-' ? -this.props.step : this.props.step;
+  _handleOnChange = () => {
+    if (this.props.onChange !== null &&
+        this.state.value !== '-') {
+      this.props.onChange(this.state.value);
+    }
+  }
+
+  _step = (direction) => {
+    const step = direction === '-' ? -this.props.step : this.props.step;
     let nextValue = parseFloat(this.state.value);
 
     if (isNaN(nextValue)) {
@@ -69,27 +84,23 @@ export default class NumericInput extends React.PureComponent {
     } else {
       nextValue += step;
 
-      if (this.props.min !== null &&
-          nextValue < this.props.min) {
+      if (nextValue < this.props.min) {
         // Allow looping.
-        if (this.props.loop &&
-          this.props.max !== null) {
+        if (this.props.loop) {
           nextValue = this.props.max;
         } else {
           nextValue = this.props.min;
         }
-      } else if (this.props.max !== null &&
-          nextValue > this.props.max) {
+      } else if (nextValue > this.props.max) {
             // Allow looping.
-        if (this.props.loop &&
-              this.props.min !== null) {
+        if (this.props.loop) {
           nextValue = this.props.min;
         } else {
           nextValue = this.props.max;
         }
       }
 
-        // Ensure rounding precision;
+      // Ensure rounding precision;
       nextValue = this._roundValue(nextValue);
     }
 
@@ -106,7 +117,7 @@ export default class NumericInput extends React.PureComponent {
       if (isNaN(nextValue)) {
         nextValue = null;
       } else {
-        nextValue = this.assureValueBounds(nextValue);
+        nextValue = this._assureValueBounds(nextValue);
 
         nextValue = this._roundValue(nextValue);
       }
@@ -115,10 +126,27 @@ export default class NumericInput extends React.PureComponent {
     this._setValue(nextValue);
   }
 
-  _handleOnChange = () => {
-    if (this.props.onChange &&
-        this.state.value !== '-') {
-      this.props.onChange(this.state.value);
+  _handleAddSubtractBtnDown = (e) => {
+    const id = e.target.dataset.id;
+
+    this._step(id);
+
+    this._autoIncrementTimeoutRef = setTimeout(() => {
+      this._autoIncrementTimeoutRef = null;
+
+      this._autoIncrementIntervalRef = setInterval(() => {
+        this._step(id);
+      }, 100);
+    }, 500);
+  }
+
+  _handleAddSubtractBtnUp = () => {
+    if (this._autoIncrementTimeoutRef !== null) {
+      clearTimeout(this._autoIncrementTimeoutRef);
+    }
+
+    if (this._autoIncrementIntervalRef !== null) {
+      clearInterval(this._autoIncrementIntervalRef);
     }
   }
 
@@ -132,13 +160,17 @@ export default class NumericInput extends React.PureComponent {
           data-id="-"
           style={this.props.btnStyle}
           className="down"
-          onClick={this._handleAddSubtractBtnClick}
-          onTouchStart={this._handleAddSubtractBtnClick}
+          disabled={this.props.disabled}
+          onMouseDown={this._handleAddSubtractBtnDown}
+          onTouchStart={this._handleAddSubtractBtnDown}
+          onMouseUp={this._handleAddSubtractBtnUp}
+          onMouseOut={this._handleAddSubtractBtnUp}
+          onTouchEnd={this._handleAddSubtractBtnUp}
         />
         <input
           style={this.props.textfieldStyle}
           type="text"
-          disabled={this.props.disableKeyInput}
+          disabled={this.props.keyInputDisabled || this.props.disabled}
           value={this.state.value === null ? '' : this.state.value}
           onChange={this._handleValueChange}
         />
@@ -146,8 +178,12 @@ export default class NumericInput extends React.PureComponent {
           data-id="+"
           style={this.props.btnStyle}
           className="up"
-          onClick={this._handleAddSubtractBtnClick}
-          onTouchStart={this._handleAddSubtractBtnClick}
+          disabled={this.props.disabled}
+          onMouseDown={this._handleAddSubtractBtnDown}
+          onTouchStart={this._handleAddSubtractBtnDown}
+          onMouseUp={this._handleAddSubtractBtnUp}
+          onMouseOut={this._handleAddSubtractBtnUp}
+          onTouchEnd={this._handleAddSubtractBtnUp}
         />
       </div>
     );

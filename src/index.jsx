@@ -24,13 +24,29 @@ export default class NumericInput extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.state.value) {
-      this.setState(() => {
+    if (this.state.value !== nextProps.value ||
+      this.state.value < this.props.min ||
+      this.state.value > this.props.max) {
+      this.setState((prevState, props) => {
         return {
-          value: nextProps.value
+          value: this.assureValueBounds(props.value)
         };
       });
     }
+  }
+
+  assureValueBounds(value) {
+    let nextValue = value;
+
+    if (this.props.min !== null &&
+        nextValue < this.props.min) {
+      nextValue = this.props.min;
+    } else if (this.props.max !== null &&
+        nextValue > this.props.max) {
+      nextValue = this.props.max;
+    }
+
+    return nextValue;
   }
 
   _roundValue(val) {
@@ -93,19 +109,14 @@ export default class NumericInput extends React.PureComponent {
       if (isNaN(nextValue)) {
         nextValue = null;
       } else {
-        if (this.props.min !== null &&
-            nextValue < this.props.min) {
-          nextValue = this.props.min;
-        } else if (this.props.max !== null &&
-            nextValue > this.props.max) {
-          nextValue = this.props.max;
-        }
+        nextValue = this.assureValueBounds(nextValue);
 
         nextValue = this._roundValue(nextValue);
       }
     }
 
-    if (nextValue !== this.state.value) {
+    if (nextValue !== this.state.value &&
+        this.props.value !== nextValue) {
       this.setState(() => {
         return {
           value: nextValue

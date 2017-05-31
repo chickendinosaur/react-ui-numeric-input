@@ -32,6 +32,14 @@ React.render(
 ```
 ---
 
+Styles for each internal component can be overridden via inline style objects.
+
+CSS variables for the component can be remapped buy adding:
+
+:root {
+--varname: value !important;
+}
+
 # Development
 
 ## Installation

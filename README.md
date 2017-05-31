@@ -34,7 +34,9 @@ React.render(
 
 #### Styles
 
-Each internal component has a style prop that can be overridden via inline style objects.
+- Each internal component has a style prop that can be overridden via inline style objects.
+- CSS can be overridden by passing the component a new class to it's className prop and overwriting it's immediate
+children CSS selectors.
 
 # Development
 
@@ -43,6 +45,10 @@ Each internal component has a style prop that can be overridden via inline style
 * git clone https://github.com/chickendinosaur/react-ui-numeric-input.git
 * cd react-ui-numeric-input
 * npm install
+
+## Storybook
+
+* npm run storybook
 
 ## Build
 

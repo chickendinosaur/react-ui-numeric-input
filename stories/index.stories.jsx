@@ -23,6 +23,24 @@ storiesOf('NumericInput', module)
       />
     );
   })
+  .add('vertical: true', () => {
+    return (
+      <NumericInput
+        value="1"
+        vertical
+        onChange={_handleChange}
+      />
+    );
+  })
+  .add('disableKeyInput: true', () => {
+    return (
+      <NumericInput
+        value="1"
+        disableKeyInput
+        onChange={_handleChange}
+      />
+    );
+  })
   .add('min: -1, max: 1', () => {
     return (
       <NumericInput

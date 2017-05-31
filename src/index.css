@@ -6,48 +6,46 @@
 	height: 40px;
 }
 
-.react-ui-numeric-input-btn {
-	font-size: 25px;
+.react-ui-numeric-input.vertical {
+	flex-direction: column-reverse;
 
+	width: 40px;
+	height: 100%;
+}
+
+.react-ui-numeric-input > button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
 	width: 40px;
-	padding: 0;
+	height: 40px;
 
-	color: rgba(239, 176,  64, 1);
-	border: none;
-	background-color: #333333;
-}
-
-.react-ui-numeric-input-btn:focus {
-	outline: none;
-}
-
-.react-ui-numeric-input-btn:active,
-.react-ui-numeric-input-btn:hover {
 	cursor: pointer;
-
-	color: #333333;
-	background-color: rgba(239, 176,  64, 1);
 }
 
-.react-ui-numeric-input-textfield {
-	font-size: 25px;
+.react-ui-numeric-input > button.up:after {
+	content: '+';
+}
 
-	display: flex;
+.react-ui-numeric-input > button.down:after {
+	content: '-';
+}
+
+.react-ui-numeric-input > input {
 	flex: 1;
 
-	width: 0;
+	width: 40px;
+	min-width: 40px;
+	min-height: 40px;
+	padding: 0;
 
 	text-align: center;
 
-	color: black;
 	border: none;
-	background-color: white;
+	outline: none;
 }
 
-.react-ui-numeric-input-textfield:focus {
-	outline: none;
+.react-ui-numeric-input > input:disabled {
+	background-color: white;
 }

@@ -10,6 +10,8 @@ export default class NumericInput extends React.PureComponent {
     step: 1,
     loop: false,
     precision: 0,
+    vertical: false,
+    disableKeyInput: false,
     btnStyle: null,
     textfieldStyle: null,
     onChange: null
@@ -24,14 +26,9 @@ export default class NumericInput extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.value !== nextProps.value ||
-      this.state.value < this.props.min ||
+    if (this.state.value < this.props.min ||
       this.state.value > this.props.max) {
-      this.setState((prevState, props) => {
-        return {
-          value: this.assureValueBounds(props.value)
-        };
-      }, this._handleOnChange);
+      this._setValue(nextProps.value);
     }
   }
 
@@ -50,7 +47,17 @@ export default class NumericInput extends React.PureComponent {
   }
 
   _roundValue(val) {
-    return Number(Math.sign(val) * (`${Math.round(`${Math.abs(val)}e${this.props.precision}`)}e-${this.props.precision}`));
+    return +(Math.sign(val) * (`${Math.round(`${Math.abs(val)}e${this.props.precision}`)}e-${this.props.precision}`));
+  }
+
+  _setValue = (nextValue) => {
+    if (nextValue !== this.state.value) {
+      this.setState(() => {
+        return {
+          value: nextValue
+        };
+      }, this._handleOnChange);
+    }
   }
 
   _handleAddSubtractBtnClick = (e) => {
@@ -87,21 +94,11 @@ export default class NumericInput extends React.PureComponent {
     }
 
 
-    if (nextValue !== this.state.value) {
-      this.setState(() => {
-        return {
-          value: nextValue
-        };
-      }, this._handleOnChange);
-    }
+    this._setValue(nextValue);
   }
 
   _handleValueChange = (e) => {
     let nextValue = e.target.value;
-
-    if (nextValue.indexOf('-') >= 0) {
-      nextValue = nextValue.replace(/-+/, '-');
-    }
 
     if (nextValue !== '-') {
       nextValue = parseFloat(e.target.value);
@@ -115,14 +112,7 @@ export default class NumericInput extends React.PureComponent {
       }
     }
 
-    if (nextValue !== this.state.value &&
-        this.props.value !== nextValue) {
-      this.setState(() => {
-        return {
-          value: nextValue
-        };
-      }, this._handleOnChange);
-    }
+    this._setValue(nextValue);
   }
 
   _handleOnChange = () => {
@@ -136,33 +126,29 @@ export default class NumericInput extends React.PureComponent {
     return (
       <div
         style={this.props.style}
-        className="react-ui-numeric-input"
+        className={`react-ui-numeric-input ${this.props.className ? this.props.className : ''} ${this.props.vertical ? 'vertical' : ''}`}
       >
         <button
           data-id="-"
           style={this.props.btnStyle}
-          className="react-ui-numeric-input-btn"
+          className="down"
           onClick={this._handleAddSubtractBtnClick}
           onTouchStart={this._handleAddSubtractBtnClick}
-        >
-          -
-        </button>
+        />
         <input
           style={this.props.textfieldStyle}
-          className="react-ui-numeric-input-textfield"
           type="text"
+          disabled={this.props.disableKeyInput}
           value={this.state.value === null ? '' : this.state.value}
           onChange={this._handleValueChange}
         />
         <button
           data-id="+"
           style={this.props.btnStyle}
-          className="react-ui-numeric-input-btn"
+          className="up"
           onClick={this._handleAddSubtractBtnClick}
           onTouchStart={this._handleAddSubtractBtnClick}
-        >
-          +
-        </button>
+        />
       </div>
     );
   }

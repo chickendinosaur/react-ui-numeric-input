@@ -31,7 +31,7 @@ export default class NumericInput extends React.PureComponent {
         return {
           value: this.assureValueBounds(props.value)
         };
-      });
+      }, this._handleOnChange);
     }
   }
 

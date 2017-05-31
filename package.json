@@ -1,15 +1,15 @@
 {
   "name": "@chickendinosaur/react-ui-numeric-input",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "lib/index.js",
   "files": [
     "**/*"
   ],
   "scripts": {
     "benchmark": "cd benchmark && for /R %i in (*.benchmark.*) do echo. && echo %i && echo. && browserify -t babelify %i | browser-run",
-    "build": "npm run clean && babel src -d lib && cp package.json lib & cp README.md lib & cp LICENSE lib",
+    "build": "npm run clean && babel src -d lib",
     "clean": "rm -rf lib",
-    "deploy": "npm run test && npm run lint && npm run build && npm publish lib",
+    "prepublish": "npm run test && npm run lint && npm run build",
     "storybook": "npm run test && opn http://localhost:9999 && start-storybook -p 9999 -c .storybook",
     "test": "babel-tape-runner test/**/*.spec.* | tap-spec",
     "lint": "eslint \"src/**/*.{jsx,js}\" --fix && eslint \"stories/**/*.{jsx,js}\" --fix && eslint \"test/**/*.{jsx,js}\" --fix && csscomb src"

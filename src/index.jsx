@@ -12,7 +12,7 @@ export default class NumericInput extends React.PureComponent {
     precision: 0,
     vertical: false,
     disabled: false,
-    keyInputDisabled: false,
+    textfieldDisabled: false,
     btnStyle: null,
     textfieldStyle: null,
     onChange: null
@@ -170,7 +170,7 @@ export default class NumericInput extends React.PureComponent {
         <input
           style={this.props.textfieldStyle}
           type="text"
-          disabled={this.props.keyInputDisabled || this.props.disabled}
+          disabled={this.props.textfieldDisabled || this.props.disabled}
           value={this.state.value === null ? '' : this.state.value}
           onChange={this._handleValueChange}
         />

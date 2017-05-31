@@ -28,11 +28,11 @@ storiesOf('NumericInput', module)
       />
     );
   })
-  .add('keyInputDisabled: true', () => {
+  .add('textfieldDisabled: true', () => {
     return (
       <NumericInput
         value="1"
-        keyInputDisabled
+        textfieldDisabled
       />
     );
   })

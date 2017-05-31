@@ -33,22 +33,22 @@ React.render(
 ---
 
 #### Props
-Name                | Type                                | Default
---------------------|-------------------------------------|:-------:
-**value**           |`number` or `string` or `null`       | `""` which converts to `null`
-**min**             |`number`                             | `Number.MIN_SAFE_INTEGER`
-**max**             |`number`                             | `Number.MAX_SAFE_INTEGER`
-**step**            |`number`                             | `1`
-**precision**       |`number`                             | `0`
-**loop**            |`boolean`                            | `false`
-**vertical**        |`boolean`                            | `false`
-**className**       |`string`                             | `null`
-**disabled**        |`boolean`                            | `false`
-**keyInputDisabled**|`boolean`                            | `false`
-**style**           |`object`                             | `null`
-**btnStyle**        |`object`                             | `null`
-**textfieldStyle**  |`object`                             | `null`
-**onChange**        |`function`                           | `null`
+Name                  | Type                                | Default
+----------------------|-------------------------------------|:-------:
+**value**             |`number` or `string` or `null`       | `""` which converts to `null`
+**min**               |`number`                             | `Number.MIN_SAFE_INTEGER`
+**max**               |`number`                             | `Number.MAX_SAFE_INTEGER`
+**precision**         |`number`                             | `0`
+**step**              |`number`                             | `1`
+**loop**              |`boolean`                            | `false`
+**vertical**          |`boolean`                            | `false`
+**disabled**          |`boolean`                            | `false`
+**textfieldDisabled** |`boolean`                            | `false`
+**className**         |`string`                             | `null`
+**style**             |`object`                             | `null`
+**btnStyle**          |`object`                             | `null`
+**textfieldStyle**    |`object`                             | `null`
+**onChange**          |`function`                           | `null`
 
 #### Styling
 

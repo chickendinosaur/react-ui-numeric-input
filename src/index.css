@@ -1,3 +1,7 @@
+/*
+Component
+*/
+
 .react-ui-numeric-input {
 	display: flex;
 	flex-direction: row;
@@ -13,6 +17,10 @@
 	height: 100%;
 }
 
+/*
+Buttons
+*/
+
 .react-ui-numeric-input > button {
 	display: flex;
 	align-items: center;
@@ -24,6 +32,10 @@
 	cursor: pointer;
 }
 
+.react-ui-numeric-input > button:disabled {
+	cursor: auto;
+}
+
 .react-ui-numeric-input > button.up:after {
 	content: '+';
 }
@@ -31,6 +43,10 @@
 .react-ui-numeric-input > button.down:after {
 	content: '-';
 }
+
+/*
+Textfield
+*/
 
 .react-ui-numeric-input > input {
 	flex: 1;

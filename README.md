@@ -35,7 +35,7 @@ React.render(
 #### Props
 Name                  | Type                                | Default
 ----------------------|-------------------------------------|:-------:
-**value**             |`number` or `string` or `null`       | `""` which converts to `null`
+**value**             |`number` or `string` or `null`       | `null`
 **min**               |`number`                             | `Number.MIN_SAFE_INTEGER`
 **max**               |`number`                             | `Number.MAX_SAFE_INTEGER`
 **precision**         |`number`                             | `0`

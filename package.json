@@ -1,6 +1,6 @@
 {
   "name": "@chickendinosaur/react-ui-numeric-input",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "lib/index.js",
   "files": [
     "**/*"

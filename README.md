@@ -32,13 +32,9 @@ React.render(
 ```
 ---
 
-Styles for each internal component can be overridden via inline style objects.
+#### Styles
 
-CSS variables for the component can be remapped buy adding:
-
-:root {
---varname: value !important;
-}
+Each internal component has a style prop that can be overridden via inline style objects.
 
 # Development
 
@@ -59,10 +55,6 @@ CSS variables for the component can be remapped buy adding:
 ## Test
 
 * npm run test
-
-## Publish
-
-* npm run deploy
 
 ---
 

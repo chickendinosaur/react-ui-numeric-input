@@ -23,8 +23,10 @@ export default class NumericInput extends React.PureComponent {
 
     this._timerRef = null;
 
+    const val = parseFloat(props.value);
+
     this.state = {
-      value: (props.value === null || props.value === '') ? null : parseFloat(props.value)
+      value: isNaN(val) ? null : val
     };
   }
 
@@ -32,22 +34,22 @@ export default class NumericInput extends React.PureComponent {
     if (this.state.value !== nextProps.value ||
       nextProps.value < this.props.min ||
       nextProps.value > this.props.max) {
+      const val = parseFloat(nextProps.value);
+
       this.setState(() => {
         return {
-          value: this._assureValueBounds(nextProps.value)
+          value: this._assureValueBounds(isNaN(val) ? null : val)
         };
       });
     }
   }
 
   _assureValueBounds(value) {
-    let nextValue = value;
+    let nextValue = null;
 
-    if (nextValue === null) {
-      nextValue = null;
-    } else if (nextValue < this.props.min) {
+    if (value < this.props.min) {
       nextValue = this.props.min;
-    } else if (nextValue > this.props.max) {
+    } else if (value > this.props.max) {
       nextValue = this.props.max;
     }
 
@@ -59,7 +61,7 @@ export default class NumericInput extends React.PureComponent {
   }
 
   _setValue = (nextValue) => {
-    if (nextValue !== this.state.value) {
+    if (nextValue != this.state.value) {
       this.setState(() => {
         return {
           value: nextValue
@@ -109,6 +111,12 @@ export default class NumericInput extends React.PureComponent {
   }
 
   _handleValueChange = (e) => {
+    // Do not allow the negative character if min is >= 0.
+    if (e.target.value.charAt(0) === '-' &&
+      this.props.min >= 0) {
+      return;
+    }
+
     let nextValue = e.target.value;
 
     if (nextValue !== '-') {
@@ -171,7 +179,7 @@ export default class NumericInput extends React.PureComponent {
           style={this.props.textfieldStyle}
           type="text"
           disabled={this.props.textfieldDisabled || this.props.disabled}
-          value={this.state.value === null ? '' : this.state.value}
+          value={this.state.value === null ? '' : this.props.precision === 0 ? this.state.value.toString() : this.state.value}
           onChange={this._handleValueChange}
         />
         <button

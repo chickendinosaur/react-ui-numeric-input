@@ -44,11 +44,11 @@ storiesOf('NumericInput', module)
       />
     );
   })
-  .add('min: -1, max: 1', () => {
+  .add('min: 0, max: 1', () => {
     return (
       <NumericInput
         value="1"
-        min={-1}
+        min={0}
         max={1}
       />
     );

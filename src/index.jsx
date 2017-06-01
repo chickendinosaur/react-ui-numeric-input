@@ -59,11 +59,15 @@ export default class NumericInput extends React.PureComponent {
   }
 
   _roundValue(val) {
-    return +(Math.sign(val) * (`${Math.ceil(`${Math.abs(val)}e${this.props.precision}`)}e-${this.props.precision}`));
+    if (val >= 0) {
+      return +(Math.sign(val) * (`${Math.ceil(`${Math.abs(val)}e${this.props.precision}`)}e-${this.props.precision}`));
+    }
+
+    return +(Math.sign(val) * (`${Math.floor(`${Math.abs(val)}e${this.props.precision}`)}e-${this.props.precision}`));
   }
 
   _setValue = (nextValue) => {
-    if (nextValue != this.state.value) {
+    if (nextValue !== this.state.value) {
       this.setState(() => {
         return {
           value: nextValue
@@ -161,7 +165,7 @@ export default class NumericInput extends React.PureComponent {
   }
 
   render() {
-    const inputDisplayValue = this.props.precision === 0 && this.state.value !== null ? this.state.value.toString() : this.state.value;
+    const inputDisplayValue = this.props.precision === 0 && this.state.value.constructor === Number ? this.state.value.toString() : this.state.value;
 
     return (
       <div

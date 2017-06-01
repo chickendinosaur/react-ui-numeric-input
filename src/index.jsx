@@ -51,6 +51,8 @@ export default class NumericInput extends React.PureComponent {
       nextValue = this.props.min;
     } else if (value > this.props.max) {
       nextValue = this.props.max;
+    } else {
+      nextValue = value;
     }
 
     return nextValue;
@@ -159,6 +161,8 @@ export default class NumericInput extends React.PureComponent {
   }
 
   render() {
+    const inputDisplayValue = this.props.precision === 0 ? this.state.value.toString() : this.state.value;
+
     return (
       <div
         style={this.props.style}
@@ -179,7 +183,7 @@ export default class NumericInput extends React.PureComponent {
           style={this.props.textfieldStyle}
           type="text"
           disabled={this.props.textfieldDisabled || this.props.disabled}
-          value={this.state.value === null ? '' : this.props.precision === 0 ? this.state.value.toString() : this.state.value}
+          value={this.state.value === null ? '' : inputDisplayValue}
           onChange={this._handleValueChange}
         />
         <button

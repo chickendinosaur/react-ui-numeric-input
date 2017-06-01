@@ -2,17 +2,17 @@ import React from 'react';
 
 export default class NumericInput extends React.PureComponent {
   static defaultProps = {
-    style: null,
-    className: null,
-    value: null,
+    disabled: false,
+    loop: false,
     min: Number.MIN_SAFE_INTEGER,
     max: Number.MAX_SAFE_INTEGER,
-    step: 1,
-    loop: false,
     precision: 0,
-    vertical: false,
-    disabled: false,
+    step: 1,
     textfieldDisabled: false,
+    value: null,
+    vertical: false,
+    className: null,
+    style: null,
     btnStyle: null,
     textfieldStyle: null,
     onChange: null
@@ -59,7 +59,7 @@ export default class NumericInput extends React.PureComponent {
   }
 
   _roundValue(val) {
-    return +(Math.sign(val) * (`${Math.round(`${Math.abs(val)}e${this.props.precision}`)}e-${this.props.precision}`));
+    return +(Math.sign(val) * (`${Math.ceil(`${Math.abs(val)}e${this.props.precision}`)}e-${this.props.precision}`));
   }
 
   _setValue = (nextValue) => {
@@ -161,7 +161,7 @@ export default class NumericInput extends React.PureComponent {
   }
 
   render() {
-    const inputDisplayValue = this.props.precision === 0 ? this.state.value.toString() : this.state.value;
+    const inputDisplayValue = this.props.precision === 0 && this.state.value !== null ? this.state.value.toString() : this.state.value;
 
     return (
       <div

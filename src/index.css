@@ -10,13 +10,6 @@ Component
 	height: 40px;
 }
 
-.react-ui-numeric-input.vertical {
-	flex-direction: column-reverse;
-
-	width: 40px;
-	height: 100%;
-}
-
 /*
 Buttons
 */

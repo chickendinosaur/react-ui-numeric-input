@@ -20,11 +20,17 @@ storiesOf('NumericInput', module)
       <NumericInput />
     );
   })
-  .add('vertical: true', () => {
+  .add('defaultValue: 0', () => {
     return (
       <NumericInput
-        value="1"
-        vertical
+        defaultValue={0}
+      />
+    );
+  })
+  .add('value: "0"', () => {
+    return (
+      <NumericInput
+        value="0"
       />
     );
   })
@@ -47,44 +53,70 @@ storiesOf('NumericInput', module)
   .add('min: 0, max: 1', () => {
     return (
       <NumericInput
-        value="1"
         min={0}
         max={1}
       />
     );
   })
-  .add('min: -1, max: 1, loop: true', () => {
+  .add('value: 0, min: -1, max: 1, wrap: true', () => {
     return (
       <NumericInput
-        value="1"
+        value={0}
         min={-1}
         max={1}
-        loop
+        wrap
       />
     );
   })
-  .add('step: 0.11, precision: 2', () => {
+  .add('value: 0, min: -1, max: 1, clamp: false', () => {
     return (
       <NumericInput
-        value="1"
+        value={0}
+        min={-1}
+        max={1}
+        clamp={false}
+      />
+    );
+  })
+  .add('value: 0, step: 0.11, precision: 2', () => {
+    return (
+      <NumericInput
+        value={0}
         step={0.11}
         precision={2}
       />
     );
   })
-  .add('step: 0.11, precision: 1', () => {
+  .add('value: 0, step: 0.11, precision: 1', () => {
     return (
       <NumericInput
-        value="1"
+        value={0}
         step={0.11}
         precision={1}
       />
     );
   })
-  .add('onChange', () => {
+  .add('stepDelay: 2000', () => {
     return (
       <NumericInput
-        value="1"
+        value={0}
+        stepDelay={2000}
+      />
+    );
+  })
+  .add('stepSpeed: 1000', () => {
+    return (
+      <NumericInput
+        value={0}
+        stepSpeed={1000}
+      />
+    );
+  })
+  .add('value: 0, precision: 5, onChange', () => {
+    return (
+      <NumericInput
+        value={0}
+        precision={5}
         onChange={_handleChange}
       />
     );

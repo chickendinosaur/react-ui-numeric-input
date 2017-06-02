@@ -1,4 +1,6 @@
-React numeric input textfield with no dependencies.
+React numeric input textfield.
+
+Built to be as a PureComponent and to be as customizable as possible without defaulting to inline styles.
 
 ---
 
@@ -22,7 +24,7 @@ React.render(
     max={1}
     step={0.1}
     precision={1}
-    loop={true}
+    wrap={true}
     onChange={(value) => {
       console.log(value);
     }}
@@ -36,11 +38,15 @@ React.render(
 Name                  | Type                                | Default
 ----------------------|-------------------------------------|:-------:
 **value**             |`number` or `string` or `null`       | `null`
+**defaultValue**        |`number`                           | `null`
 **min**               |`number`                             | `Number.MIN_SAFE_INTEGER`
 **max**               |`number`                             | `Number.MAX_SAFE_INTEGER`
 **precision**         |`number`                             | `0`
 **step**              |`number`                             | `1`
-**loop**              |`boolean`                            | `false`
+**stepDelay**         |`number`                             | `500`
+**stepSpeed**         |`number`                             | `100`
+**clamp**             |`boolean`                            | `true`
+**wrap**              |`boolean`                            | `false`
 **vertical**          |`boolean`                            | `false`
 **disabled**          |`boolean`                            | `false`
 **textfieldDisabled** |`boolean`                            | `false`

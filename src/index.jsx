@@ -1,16 +1,27 @@
 import React from 'react';
 
+export function _formatValue(value) {
+  if (isNaN(parseFloat(value))) {
+    return null;
+  }
+
+  return parseFloat(value);
+}
+
 export default class NumericInput extends React.PureComponent {
   static defaultProps = {
-    disabled: false,
-    loop: false,
+    value: null,
+    defaultValue: null,
     min: Number.MIN_SAFE_INTEGER,
     max: Number.MAX_SAFE_INTEGER,
     precision: 0,
     step: 1,
+    stepDelay: 500,
+    stepSpeed: 100,
+    clamp: true,
+    disabled: false,
     textfieldDisabled: false,
-    value: null,
-    vertical: false,
+    wrap: false,
     className: null,
     style: null,
     btnStyle: null,
@@ -21,12 +32,12 @@ export default class NumericInput extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this._timerRef = null;
-
-    const val = parseFloat(props.value);
+    this._timeoutRef = null;
+    this._intervalRef = null;
 
     this.state = {
-      value: isNaN(val) ? null : val
+      value: _formatValue(this._formatDisplayValue(props.value)),
+      displayValue: this._formatDisplayValue(props.value)
     };
   }
 
@@ -34,110 +45,119 @@ export default class NumericInput extends React.PureComponent {
     if (this.state.value !== nextProps.value ||
       nextProps.value < this.props.min ||
       nextProps.value > this.props.max) {
-      const val = parseFloat(nextProps.value);
-
       this.setState(() => {
         return {
-          value: this._assureValueBounds(isNaN(val) ? null : val)
+          value: _formatValue(this._formatDisplayValue(nextProps.value)),
+          displayValue: this._formatDisplayValue(nextProps.value)
         };
       });
     }
   }
 
-  _assureValueBounds(value) {
-    let nextValue = null;
-
-    if (value < this.props.min) {
-      nextValue = this.props.min;
-    } else if (value > this.props.max) {
-      nextValue = this.props.max;
-    } else {
-      nextValue = value;
+  _roundValue(value) {
+    if (value >= 0) {
+      return +(Math.sign(value) * (`${Math.ceil(`${Math.abs(value)}e${this.props.precision}`)}e-${this.props.precision}`));
     }
 
-    return nextValue;
+    return +(Math.sign(value) * (`${Math.floor(`${Math.abs(value)}e${this.props.precision}`)}e-${this.props.precision}`));
   }
 
-  _roundValue(val) {
-    if (val >= 0) {
-      return +(Math.sign(val) * (`${Math.ceil(`${Math.abs(val)}e${this.props.precision}`)}e-${this.props.precision}`));
+  _formatDisplayValue(value) {
+    if (value === '-') {
+      return value;
     }
 
-    return +(Math.sign(val) * (`${Math.floor(`${Math.abs(val)}e${this.props.precision}`)}e-${this.props.precision}`));
-  }
-
-  _setValue = (nextValue) => {
-    if (nextValue !== this.state.value) {
-      this.setState(() => {
-        return {
-          value: nextValue
-        };
-      }, this._handleOnChange);
+    if (isNaN(parseFloat(value))) {
+      return '';
     }
-  }
 
-  _handleOnChange = () => {
-    if (this.props.onChange !== null &&
-        this.state.value !== '-') {
-      this.props.onChange(this.state.value);
+    value = value.toString();
+
+    const indexOfDecimal = value.indexOf('.');
+
+    if (
+      this.props.precision === 0 ||
+      indexOfDecimal < value.length - 1
+    ) {
+      return this._clampValueToBounds(this._roundValue(parseFloat(value))).toString();
     }
+
+    return value;
   }
 
-  _step = (direction) => {
-    const step = direction === '-' ? -this.props.step : this.props.step;
-    let nextValue = parseFloat(this.state.value);
-
-    if (isNaN(nextValue)) {
-      nextValue = step;
-    } else {
-      nextValue += step;
-
-      if (nextValue < this.props.min) {
-        // Allow looping.
-        if (this.props.loop) {
-          nextValue = this.props.max;
-        } else {
-          nextValue = this.props.min;
-        }
-      } else if (nextValue > this.props.max) {
-            // Allow looping.
-        if (this.props.loop) {
-          nextValue = this.props.min;
-        } else {
-          nextValue = this.props.max;
-        }
+  _clampValueToBounds(value) {
+    if (this.props.clamp) {
+      if (value === null) {
+        return value;
       }
 
-      // Ensure rounding precision;
-      nextValue = this._roundValue(nextValue);
+      if (value < this.props.min) {
+        return this.props.min;
+      } else if (value > this.props.max) {
+        return this.props.max;
+      }
     }
 
+    return value;
+  }
 
-    this._setValue(nextValue);
+  _wrapValue(value) {
+    if (this.props.wrap) {
+      if (value < this.props.min) {
+        return this.props.max;
+      } else if (value > this.props.max) {
+        return this.props.min;
+      }
+    }
+
+    return value;
+  }
+
+  _step(direction) {
+    const step = direction === '-' ? -this.props.step : this.props.step;
+    let nextValue = this.state.value;
+
+    if (nextValue === null) {
+      if (this.props.defaultValue !== null) {
+        nextValue = this.props.defaultValue + step;
+      } else if (direction === '+') {
+        nextValue = this.props.min + step;
+      } else {
+        nextValue = this.props.max + step;
+      }
+    } else {
+      nextValue += step;
+      nextValue = this._wrapValue(nextValue);
+    }
+
+    this._setValues(nextValue);
+  }
+
+  _setValues(nextDisplayValue) {
+    if (nextDisplayValue !== this.state.displayValue) {
+      nextDisplayValue = this._formatDisplayValue(nextDisplayValue);
+
+      this.setState((prevState, props) => {
+        // Trigger onChange event.
+        if (props.onChange !== null) {
+          const nextValue = _formatValue(nextDisplayValue);
+
+          if (nextValue !== prevState.value) {
+            props.onChange(_formatValue(nextDisplayValue));
+          }
+        }
+
+        // Create new state.
+        return {
+          displayValue: this._formatDisplayValue(nextDisplayValue),
+          value: _formatValue(nextDisplayValue)
+        };
+      });
+    }
   }
 
   _handleValueChange = (e) => {
-    // Do not allow the negative character if min is >= 0.
-    if (e.target.value.charAt(0) === '-' &&
-      this.props.min >= 0) {
-      return;
-    }
-
-    let nextValue = e.target.value;
-
-    if (nextValue !== '-') {
-      nextValue = parseFloat(e.target.value);
-
-      if (isNaN(nextValue)) {
-        nextValue = null;
-      } else {
-        nextValue = this._assureValueBounds(nextValue);
-
-        nextValue = this._roundValue(nextValue);
-      }
-    }
-
-    this._setValue(nextValue);
+    this._setValues(e.target.value);
   }
 
   _handleAddSubtractBtnDown = (e) => {
@@ -145,28 +165,28 @@ export default class NumericInput extends React.PureComponent {
 
     this._step(id);
 
-    this._autoIncrementTimeoutRef = setTimeout(() => {
-      this._autoIncrementTimeoutRef = null;
+    this._timeoutRef = setTimeout(() => {
+      this._timeoutRef = null;
 
-      this._autoIncrementIntervalRef = setInterval(() => {
+      this._step(id);
+
+      this._intervalRef = setInterval(() => {
         this._step(id);
-      }, 100);
-    }, 500);
+      }, this.props.stepSpeed);
+    }, this.props.stepDelay);
   }
 
   _handleAddSubtractBtnUp = () => {
-    if (this._autoIncrementTimeoutRef !== null) {
-      clearTimeout(this._autoIncrementTimeoutRef);
+    if (this._timeoutRef !== null) {
+      clearTimeout(this._timeoutRef);
     }
 
-    if (this._autoIncrementIntervalRef !== null) {
-      clearInterval(this._autoIncrementIntervalRef);
+    if (this._intervalRef !== null) {
+      clearInterval(this._intervalRef);
     }
   }
 
   render() {
-    const inputDisplayValue = this.props.precision === 0 && this.state.value.constructor === Number ? this.state.value.toString() : this.state.value;
-
     return (
       <div
         style={this.props.style}
@@ -187,7 +207,7 @@ export default class NumericInput extends React.PureComponent {
           style={this.props.textfieldStyle}
           type="text"
           disabled={this.props.textfieldDisabled || this.props.disabled}
-          value={this.state.value === null ? '' : inputDisplayValue}
+          value={this.state.displayValue}
           onChange={this._handleValueChange}
         />
         <button

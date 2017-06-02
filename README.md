@@ -47,7 +47,6 @@ Name                  | Type                                | Default
 **stepSpeed**         |`number`                             | `100`
 **clamp**             |`boolean`                            | `true`
 **wrap**              |`boolean`                            | `false`
-**vertical**          |`boolean`                            | `false`
 **disabled**          |`boolean`                            | `false`
 **textfieldDisabled** |`boolean`                            | `false`
 **className**         |`string`                             | `null`

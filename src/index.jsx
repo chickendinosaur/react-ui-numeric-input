@@ -190,7 +190,7 @@ export default class NumericInput extends React.PureComponent {
     return (
       <div
         style={this.props.style}
-        className={`react-ui-numeric-input ${this.props.className ? this.props.className : ''} ${this.props.vertical ? 'vertical' : ''}`}
+        className={`react-ui-numeric-input ${this.props.className ? this.props.className : ''}`}
       >
         <button
           data-id="-"

@@ -58,7 +58,7 @@ Name                  | Type                                | Default
 #### Styling
 
 - Each internal component has a style prop that can be overridden via inline style objects.
-- CSS can be overridden by passing the component a new class to mit's className prop and overwriting it's immediate
+- CSS can be overridden by passing the component a new class to its className prop and overwriting it's immediate
 children CSS selectors.
 
 #### Features
